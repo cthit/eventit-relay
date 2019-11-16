@@ -19,18 +19,12 @@ app.get('/', (req, res) => res.send('Hello World!'))
 app.get('/test', (req, res) => res.send('Hello World!'))
 
 app.get('/dbtest',cors(), (req, res) => {
-    console.log("idk man")
-    var options = {
-        method: 'GET',
-        uri: 'http://localhost:8080',
-        resolveWithFullResponse: true    //  <---  <---  <---  <---
-    };
-    rp(options)
+    rp('http://localhost:8080/test')
     .then(function (htmlString) {
-        console.log(htmlString)
+        res.send(htmlString)
     })
     .catch(function (err) {
-        // Crawling failed...
+        res.send(err)
     });
 })
 
