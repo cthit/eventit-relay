@@ -13,6 +13,9 @@ app.use(cors())
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 
+const authDep = require("./eventit-auth");
+
+const auth = authDep(app) // Eanble auth routes
 
 app.get('/', (req, res) => res.send('Hello World!'))
 
