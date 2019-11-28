@@ -28,6 +28,12 @@ app.get('/dbtest',cors(), (req, res) => {
     });
 })
 
+app.get('/posttest', (req, res) => {
+  let meme = {"name": "DANK MEMES"}
+  res.send(meme)
+   
+})
+
 
 
 /*request('http://www.google.com', function (error, response, body) {
