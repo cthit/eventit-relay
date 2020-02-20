@@ -1,52 +1,61 @@
 const express = require("express");
 const cors = require("cors");
 
-var rp = require('request-promise');
-const request = require('request');
-const axios = require('axios')
+var rp = require("request-promise");
 
-
-const port = 4000; 
+const port = 4000;
 const app = express();
 
-app.use(cors())
+const cal = require("./relay-cal");
+
+app.use(cal);
+
+app.use(cors());
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 
-const authDep = require("./eventit-auth");
+//const authDep = require("./../../eventit-auth");
 
-const auth = authDep(app) // Eanble auth routes
+//const auth = authDep(app) // Eanble auth routes
 
-app.get('/', (req, res) => res.send('Hello World!'))
+var options = {
+  method: "POST",
+  uri: "http://localhost:3040/auth",
+  body: {
+    token: "digit"
+  },
+  json: true // Automatically stringifies the body to JSON
+};
 
-app.get('/test', (req, res) => res.send('Hello World!'))
-
-app.get('/dbtest',cors(), (req, res) => {
-    rp('http://localhost:8080/test')
-    .then(function (htmlString) {
-        res.send(htmlString)
+function authenticate(input) {
+  return rp(options)
+    .then(response => {
+      console.log(response);
+      return response;
     })
-    .catch(function (err) {
-        res.send(err)
+    .catch(err => {
+      console.log(err);
     });
-})
-
-app.get('/posttest', (req, res) => {
-  let meme = {"name": "DANK MEMES"}
-  res.send(meme)
-   
-})
-
-
-
-/*request('http://www.google.com', function (error, response, body) {
-  if (!error && response.statusCode == 200) {
-    console.log(body) // Print the google web page.
-  }
-})
-*/
-
- function getAllData(){
-    
 }
 
+app.get("/", (req, res) => res.send("Hello World!"));
+
+app.get("/test", (req, res) => cal.test(app));
+
+app.get("/posttest", (req, res) => {
+  let meme = {
+    name: "DANK MEMES"
+  };
+  res.send(meme);
+});
+
+app.get("/authtest", (req, res) => {
+  authenticate(testToken)
+    .then(response => {
+      res.send(response);
+    })
+    .catch(err => {
+      console.log(err);
+    });
+});
+function getAllData() {}
